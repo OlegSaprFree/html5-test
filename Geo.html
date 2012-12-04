@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+	<title>Is Geolocation part of HTML5?</title>
+	<meta charset="utf-8">
+	<style>
+		html, body {
+			margin:0;
+			padding:0;
+			height:100%;
+			}
+		body {
+			background:#A5BFDD;
+			}
+		#map {
+			position:absolute;
+			top:0;
+			left:0;
+			margin:0;
+			padding:0;
+			width:100%;
+			height:100%;
+			color:#A5BFDD;
+			}
+		.no-js {
+			background:#A5BFDD url(i/shadow.png) 60% 50% no-repeat;
+			}
+		.no-js body {
+			background:url(i/answer.png) 60% 50% no-repeat;
+			}
+	</style>
+	<script>
+		document.documentElement.className = 'js';
+
+		function getLocation() {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(
+				successPosition, 
+				errorPosition
+				);
+			} else {
+				errorPosition();
+			}
+		}
+
+		function successPosition(position) {
+			var location = document.getElementById('location');
+			/*document.getElementById('location')*/
+			location.innerHTML = '<p>Точность: ' + position.coords.accuracy + ' метров</p>';
+			loadMap(
+				position.coords.latitude, 
+				position.coords.longitude, 14
+			);
+		}
+
+		function errorPosition() {
+			loadMap(
+				(Math.cos(Math.random() * 70) * 70).toFixed(6), 
+				(Math.cos(Math.random() * 180) * 180).toFixed(6), 3
+			);
+		}
+
+		function loadMap(latitude, longitude, level) {
+			var position = new google.maps.LatLng(latitude, longitude)
+			var map = new google.maps.Map(
+				document.getElementById('map'), 
+				{
+					zoom: level,
+					center: position,
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+				}
+			);
+			var icon = new google.maps.Marker({
+				position: position,
+				map: map,
+				/*icon: google.maps.SymbolPath.CIRCLE,*/
+				title: 'Я здесь!'
+			})
+		}
+
+		window.onload = getLocation;
+	</script>
+	<script src="https://maps.googleapis.com/maps/api/js?sensor=false">	</script>
+</head>
+<body>
+	<div id="map"></div>
+	<div id="location"></div>
+</body>
+</html>

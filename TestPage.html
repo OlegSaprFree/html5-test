@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="utf-8" />
+		<title>HTML 5 Test Page</title>
+		<link rel="stylesheet" href="MyFirstStyle.css" media="screen" />
+	</head>
+	<body>
+		<header>
+			<h1>Добро пожаловать на мою первую страницу<h1>
+			<small>Это действительно моя первая <em>HTML5</em>-страница</small>
+		</header>		
+		<section>
+			<h2>План изучения HTML5</h2>
+			<article>
+				<h3>Прочитать книгу про HTML5</h3>
+				<p>Прочитать книгу Diving into HTML5</p>
+				<p>Статус: сделано</p>
+			</article>
+			<article>
+				<h3>Написать тестовую страницу</h3>
+				<p>Написать страницу с использованием новых тегов</p>
+				<p>Статус: в процессе</p>
+			</article>
+			<article>
+				<h3>Прочитать про язык CSS</h3>
+				<p>Прочитать статью про CSS</p>
+				<p>Статус: не сделано</p>
+			</article>
+			<article>
+				<h3>Применить CSS</h3>
+				<p>Оформить тестовую страницу с помощью CSS</p>
+				<p>Статус: не сделано</p>
+			</article>
+		</section>
+		<input type="button" value="Сохранить данные" onclick="SaveData()"></input>
+		<input type="button" value="Получить данные" onclick="GetData()"></input>
+		<input type="button" value="Обновить данные" onclick="UpdateData()"></input>
+		<script>
+			function SaveData()
+			{
+				localStorage.setItem("key1", "Тестовые данные");
+				localStorage.setItem("key2", "Другие тестовые данные");
+				localStorage.setItem("key3", "Еще одни тестовые данные");
+			}
+			function UpdateData()
+			{
+				localStorage.setItem("key1", "Тестовое сообщение обновлено");
+			}
+			function GetData()
+			{
+				var d = localStorage.getItem("key1");
+				alert(d);
+			}
+		</script>
+		
+		<input type="button" value="Сохранить данные" onclick="SaveDataDB()"></input>
+		<input type="button" value="Получить данные" onclick="GetDataDB()"></input>
+		<script>
+			function SaveDataDB()
+			{
+				var db;
+				if (window.openDatabase)
+				{
+					db = openDatabase('testdb', '1.0', 'Тестовая база данных', 2 * 1024 * 1024);
+					db.transaction(function(tx) { 
+						tx.executeSql('create table if not exists table1 (id, name, description)');
+						tx.executeSql('insert into table1 (id, name, description) values (?, ?, ?)', [1, 'Сказка', 'Ресторан русской кухни']);
+					});
+				}
+			}
+			function GetDataDB()
+			{
+				var db;
+				if (window.openDatabase)
+				{
+					db = openDatabase('testdb', '1.0', 'Тестовая база данных', 2 * 1024 * 1024);
+					db.transaction(function(tx) { 
+						tx.executeSql('SELECT * FROM table1', [], function (tx, results) {
+							var len = results.rows.length, i;
+							for (i = 0; i < len; i++) {
+								alert(results.rows.item(i).description);
+							}
+						});
+					});
+				}
+			}
+		</script>
+		
+		<form>
+			<label for="tbName">Имя</label>
+			<input name="tbName" id="tbName" type="text" required />
+			<label for="tbDate">Дата</label>
+			<input name="tbDate" id="tbDate" type="date" />
+			<input type="range" min="0" max="100" />
+			<input type="color" />
+			<input type="submit" />
+		</form>
+		<aside>
+			<p>Пример боковой понели</p>
+			<details>
+				<summary>Подробнее...</summary>
+				<p>Этот текст должен быть скрыт</p>
+			</details>
+		</aside>
+		<footer>
+			<small>Copyright &copy; 2012 Сапрыкин Олег. Все права защищены.</small>
+		</footer>
+	</body>
+</html>
